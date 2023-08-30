@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block  content%}
+
+<h1> Home template </h1>
+
+<div>
+    {% for profile in profiles %}
+        <div id="{{profile.id}}">name: <a href="{% url 'profile' profile.id %}">{{ profile.name }}</a> </div>
+    {% endfor %}
+</div>
+
+{% endblock  %}
+
