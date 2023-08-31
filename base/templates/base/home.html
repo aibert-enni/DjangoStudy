@@ -4,9 +4,24 @@
 
 <h1> Home template </h1>
 
+<h2><a href="{% url 'create-room' %}">create a room</a></h2>
+
 <div>
-    {% for profile in profiles %}
-        <div id="{{profile.id}}">name: <a href="{% url 'profile' profile.id %}">{{ profile.name }}</a> </div>
+    {% for room in rooms %}
+        <div id="{{room.id}}">
+            <h5><a href="{% url 'update-room' room.id %}">Edit</a></h5>
+            <h5><a href="">Delete</a></h5>
+            <span>@{{ room.host.username }}</span>
+            <h3><a href="{% url 'room' room.id %}">{{ room.name }}</a></h3>
+            <div>
+                <h3>Description:</h3>
+                <p>{{room.description}}</p>
+            </div>
+            <small>{{room.topic}}</small>
+            <hr>
+            
+            <hr>
+        </div>
     {% endfor %}
 </div>
 

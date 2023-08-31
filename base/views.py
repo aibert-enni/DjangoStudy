@@ -1,21 +1,46 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.shortcuts import render, redirect
+from .models import Room
+from .forms import RoomForm
 # Create your views here.
-profiles = [
-    {'id': 0, 'name': "Chmo", 'surname': "sosatel"},
-    {'id': 1, 'name': "Rock", 'surname': "sosatel"},
-    {'id': 2, 'name': "Tomas", 'surname': "sosatel"}
-]
+
 
 
 def home(request):
-    return render(request, 'base/home.html', {'profiles': profiles})
+    rooms = Room.objects.all()
+    context = {'rooms': rooms}
+    return render(request, 'base/home.html', context)
 
-def profile(request, pk):
-    profile = None
-    for i in profiles:
-        if i['id'] == int(pk):
-            profile = i
+def room(request, pk):
+    room = None
+    room = Room.objects.get(id=pk)
+    context = {'room': room}
 
-    return render(request, 'base/profile.html', {'profile': profile})
+    return render(request, 'base/room.html', context)
+
+def createRoom(request):
+    context = {'form': RoomForm()}
+
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+    return render(request, 'base/room_form.html', context)
+
+def updateRoom(request, pk):
+    room = Room.objects.get(id=pk)
+    form = RoomForm(instance=room)
+
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        else:
+            print("Nothing changed")
+
+    context = {'form': form}
+
+    return render(request, 'base/room_form.html', context)
