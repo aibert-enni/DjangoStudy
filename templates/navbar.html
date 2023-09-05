@@ -1,2 +1,16 @@
-<a href="/">LOGO</a>
-<hr>
+<nav class="navbar border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Universe</a>
+      <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
+        <input class="form-control me-2 search-bar" name="q" type="text" placeholder="Search rooms..." aria-label="Search">
+      </form>
+      {% if request.user.is_authenticated %}
+      <div class="d-flex justify-content-center">
+        <p>{{request.user}}</p>
+        <a class="btn" href="{% url 'logout' %}">Logout</a>
+      </div>
+      {% else %}
+      <a class="btn" href="{% url 'login' %}">Login</a>
+      {% endif %}
+    </div>
+  </nav>

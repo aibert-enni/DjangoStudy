@@ -2,27 +2,59 @@
 
 {% block  content%}
 
-<h1> Home template </h1>
+<div class="home-container container-fluid row">
+    <div class="topics-bar col-2">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <p class="fw-medium text-center">BROWSE TOPICS</p>
+            </li>
+            {% for topic in topics %}
+                <li class="list-group-item">
+                    <a class="topic-item" href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-<h2><a href="{% url 'create-room' %}">create a room</a></h2>
-
-<div>
-    {% for room in rooms %}
-        <div id="{{room.id}}">
-            <h5><a href="{% url 'update-room' room.id %}">Edit</a></h5>
-            <h5><a href="">Delete</a></h5>
-            <span>@{{ room.host.username }}</span>
-            <h3><a href="{% url 'room' room.id %}">{{ room.name }}</a></h3>
+    <div class="col-7 row">
+        <div class="d-flex justify-content-between p-0">
             <div>
-                <h3>Description:</h3>
-                <p>{{room.description}}</p>
+                <h5>Study Rooms</h5>
+                <p class="fs-6">Total {{room_count}} room found</p>
             </div>
-            <small>{{room.topic}}</small>
-            <hr>
-            
-            <hr>
+            <div class="center">
+                <a class="btn btn-primary fs-6" href="{% url 'create-room' %}">+ Create a room</a>
+            </div>
         </div>
-    {% endfor %}
+        {% for room in rooms %}
+            <div id="{{room.id}}" class="card w-10 mb-1">
+                <div class="card-header">
+                    <span>@{{ room.host.username }}</span>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title"><a href="{% url 'room' room.id %}">{{ room.name }}</a></h4>
+                    <div>
+                    <p>{{room.description}}</p>
+                    </div>
+                    <p>{{room.topic}}</p>
+                    {% if request.user == room.host or request.user.is_superuser %}
+                    <a class="btn btn-primary" href="{% url 'update-room' room.id %}">Edit</a>
+                    <a class="btn btn-primary" href="{% url 'delete-room' room.id%}">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="topics-bar col-3">
+        <h4>Recent news</h4>
+        <ul class="list-group">
+            <li class="list-group-item">An item</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+            <li class="list-group-item">And a fifth one</li>
+          </ul>
+    </div>
 </div>
 
 {% endblock  %}
